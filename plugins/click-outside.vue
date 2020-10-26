@@ -4,12 +4,10 @@ import Vue from "vue";
 let handleOutsideClick;
 
 export default Vue.directive("click-outside", {
-  bind(
-    el,
-    binding,
-    vnode
-  ) {
+  bind(el, binding, vnode) {
+
     handleOutsideClick = (e) => {
+      
       e.stopPropagation();
 
       const { handler, exclude } = binding.value;
@@ -18,7 +16,6 @@ export default Vue.directive("click-outside", {
       exclude.forEach((refName) => {
         if (!clickedOnExcludedEl) {
           const excludedEl = vnode.context.$refs[refName];
-          console.log(excludedEl);
 
           clickedOnExcludedEl = excludedEl.contains(e.target);
         }
