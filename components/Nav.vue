@@ -183,7 +183,6 @@ export default Vue.extend({
     },
 
     toggleDropdown() {
-      console.log("toggleDropdown", this.showDropdown);
       this.showDropdown = !this.showDropdown;
     },
   },

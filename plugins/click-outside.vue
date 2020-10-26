@@ -16,8 +16,9 @@ export default Vue.directive("click-outside", {
       exclude.forEach((refName) => {
         if (!clickedOnExcludedEl) {
           const excludedEl = vnode.context.$refs[refName];
-
-          clickedOnExcludedEl = excludedEl.contains(e.target);
+          if (excludedEl.contains) {
+            clickedOnExcludedEl = excludedEl.contains(e.target);
+          }
         }
       });
 
