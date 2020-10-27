@@ -18,7 +18,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/click-outside.vue'
+    '~/plugins/click-outside.js',
+    { src: '~/plugins/firebase.js', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -40,8 +41,10 @@ export default {
     '@nuxtjs/pwa'
   ],
 
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:6000',
+    credentials: true
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {

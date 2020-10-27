@@ -1,7 +1,5 @@
 <template>
   <div>
-    <Nav />
-
     <div class="flex flex-row">
       <div>
         <input value="untitled" />

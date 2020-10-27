@@ -1,8 +1,12 @@
 <script lang="ts">
 import Vue from "vue";
 
-export default Vue.extend({
+export default {
+
+  middleware: "auth",
+
   data() {
+
     return {
       scripts: [
         {
@@ -37,13 +41,11 @@ export default Vue.extend({
       ],
     };
   },
-});
+};
 </script>
 
 <template>
   <div>
-    <Nav />
-
     <div class="w-10/12 mx-auto py-6 px-4">
       <div class="flex flex-row items-start">
         <div class="shadow w-3/5 mr-4">
