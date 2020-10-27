@@ -1,24 +1,23 @@
+import { GetterTree, ActionTree } from 'vuex'
+
+import { User } from "~/util/types"
+
 export const state = () => ({
-    user: null
+    user: null as User,
 })
 
-export const mutations = {
+export type RootState = ReturnType<typeof state>
 
-    setUser(state, user) {
-        state.user = user
-    },
+export const getters: GetterTree<RootState, RootState> = {
+    user: state => state.user,
 }
 
-// export const actions = {
+export const mutations = {
+    setUser: (state: RootState, user: User) => (state.user = user),
+}
 
-//     async login({ commit }, {email, password}) {
-//         const auth = this.$firebaseauth()
-//         let err = await auth.login(email, password)
-//         if (!err) {
-//             commit('setUser', auth.user())
-//             return null
-//         }
+export const actions: ActionTree<RootState, RootState> = {
 
-//         return err
-//     }
-// }
+    async fetchThings({ commit }) {
+    },
+}

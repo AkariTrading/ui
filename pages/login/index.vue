@@ -14,25 +14,25 @@
     </div>
 
     <div>
-      <nuxt-link to="/register"
-        ><button class="">Sign Up</button></nuxt-link
-      >
+      <nuxt-link to="/register"><button class="">Sign Up</button></nuxt-link>
     </div>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropOptions } from 'vue'
+export default Vue.extend({
+
   data() {
     return {
       email: "",
       password: "",
     };
   },
+
   methods: {
     async userLogin() {
-      const auth = this.$firebaseauth();
-      let errCode = await auth.login(this.email, this.password);
+      let errCode = await this.$auth.login(this.email, this.password);
       if (!errCode) {
         this.$router.push("/");
       } else {
@@ -40,7 +40,8 @@ export default {
       }
     },
   },
-};
+});
 </script>
+
 <style >
 </style>

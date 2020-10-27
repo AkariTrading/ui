@@ -1,5 +1,5 @@
 export default {
-  // Global page headers (https://go.nuxtjs.dev/config-head)
+
   head: {
     title: 'ui',
     meta: [
@@ -18,8 +18,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/click-outside.js',
-    { src: '~/plugins/firebase.js', mode: 'client' },
+    '~/plugins/click-outside.ts',
+    '~/plugins/auth.ts',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

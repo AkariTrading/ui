@@ -90,7 +90,7 @@
               />
             </svg>
           </button>
-          <div class="ml-3 relative">
+          <div class="ml-3 relative" id="profile-dropdown">
             <div>
               <button
                 @click="toggleDropdown"
@@ -113,7 +113,7 @@
                 handler: 'onHideDropdown',
               }"
               v-show="showDropdown"
-              class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg"
+              class="dropdown origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg"
             >
               <div
                 class="py-1 rounded-md bg-white shadow-xs"
@@ -167,6 +167,9 @@
   </nav>
 </template>
 
+<style>
+</style>
+
 
 <script lang="ts">
 import Vue from "vue";
@@ -179,7 +182,7 @@ export default Vue.extend({
 
   methods: {
     onHideDropdown() {
-        this.showDropdown = false;
+      this.showDropdown = false;
     },
 
     toggleDropdown() {

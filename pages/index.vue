@@ -1,12 +1,10 @@
 <script lang="ts">
 import Vue from "vue";
 
-export default {
-
+export default Vue.extend({
   middleware: "auth",
 
   data() {
-
     return {
       scripts: [
         {
@@ -41,7 +39,7 @@ export default {
       ],
     };
   },
-};
+});
 </script>
 
 <template>

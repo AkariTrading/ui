@@ -16,22 +16,6 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
 }
 
-
-async function login(email, password) {
-
-    let errCode = null
-    await firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
-
-        console.log(error)
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        errCode = errCode;
-    });
-
-    return errCode;
-}
-
 async function logout() {
     await firebase.auth().signOut()
 }
@@ -40,13 +24,14 @@ async function user() {
     return firebase.auth().currentUser;
 }
 
-export default (context, inject) => {
+async function login(email, password) {
 
-    const methods = {
-        login: login,
-        logout: logout,
-        user: user
-    }
-  
-    inject('firebaseauth', () => methods)
+    let errCode = null
+    await firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        errCode = errCode;
+    });
+
+    return errCode;
 }

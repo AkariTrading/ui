@@ -17,7 +17,12 @@
 
     <div class="mx-auto flex h-full">
       <div class="w-3/6 h-full">
-        <textarea class="editor" ref="editor" id="editor" name="editor"></textarea>
+        <textarea
+          class="editor"
+          ref="editor"
+          id="editor"
+          name="editor"
+        ></textarea>
       </div>
 
       <div class="w-3/6 p-4">
@@ -64,9 +69,7 @@ export default Vue.extend({
   },
 
   methods: {
-    onRun() {
-      console.log(this.body);
-    },
+    onRun() {},
   },
 
   data() {
@@ -124,7 +127,6 @@ export default Vue.extend({
 .CodeMirror {
   height: 100%;
 }
-
 </style>
 
 
