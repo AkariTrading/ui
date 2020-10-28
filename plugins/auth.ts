@@ -2,11 +2,12 @@ import { Plugin } from '@nuxt/types'
 import { User } from "~/util/types"
 
 interface auth {
-    login: (email: any, password: any) => Promise<any>;
+    login: (email: any, password: any) => Promise<boolean>;
+    verify: () => Promise<boolean>;
     logout: () => Promise<any>;
 }
 
-import { mutations, RootState } from "~/store"
+import { mutations } from "~/store"
 
 declare module 'vue/types/vue' {
     // this.$auth inside Vue components
@@ -33,32 +34,55 @@ declare module 'vuex/types/index' {
     }
 }
 
-const plugin: Plugin = ({store, $axios, res, req, redirect}, inject) => {
+const plugin: Plugin = ({ store, $axios, redirect }, inject) => {
 
     $axios.onError(error => {
-        if (error.response.status === 500) {
-            redirect('/sorry')
+        if (error.response.status === 401) {
+            redirect('/login')
         }
     })
 
     const login = async (email: string, password: string) => {
 
-        // call /api/login
+        try {
+            var result = await $axios.post("/api/auth/login", { email, password });
+            if (result.status !== 200) {
+                return false
+            } else {
+                store.commit(mutations.setUser.name, { email: email } as User)
+                return true
+            }
 
-        const user: User = {
-            email: "lol"
+        } catch (err) {
+            return false
         }
+    }
 
-        store.commit(mutations.setUser.name, user)
-
+    const verify = async () => {
+        try {
+            const result = await $axios.get<User>("/api/auth/verifySession");
+            if (result.status !== 200) {
+                return false
+            } else {
+                console.log(result.data)
+                store.commit(mutations.setUser.name, { email: result.data.email } as User)
+                return true
+            }
+        } catch (err) {
+            return false
+        }
     }
 
     const logout = async () => {
+        await $axios.$post("/api/auth/logout").catch(err => err);
+        store.commit(mutations.setUser.name, null);
+        redirect("/login")
     }
 
     const methods: auth = {
         login: login,
         logout: logout,
+        verify: verify
     }
 
     inject('auth', methods)

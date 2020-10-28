@@ -32,11 +32,9 @@ export default Vue.extend({
 
   methods: {
     async userLogin() {
-      let errCode = await this.$auth.login(this.email, this.password);
-      if (!errCode) {
+      if (await this.$auth.login(this.email, this.password)) {
         this.$router.push("/");
       } else {
-        console.log(errCode);
       }
     },
   },
