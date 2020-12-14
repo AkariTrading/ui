@@ -4,6 +4,9 @@ const auth: Middleware = async ({ store, redirect, req, $axios, $auth }) => {
 
     console.log("server", process.server, "client", process.client);
 
+    redirect("/demo")
+    return
+
     if (store.state.user) {
         return
     }
