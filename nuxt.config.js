@@ -20,6 +20,7 @@ export default {
   plugins: [
     // '~/plugins/click-outside.ts',
     '~/plugins/auth.ts',
+    '~/plugins/api.ts',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -42,8 +43,8 @@ export default {
   ],
 
   axios: {
-    baseURL: 'http://localhost:7000',
-    credentials: true
+    baseURL: 'http://localhost:7300',
+    credentials: true,
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

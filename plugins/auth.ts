@@ -1,4 +1,4 @@
-import { Plugin } from '@nuxt/types'
+import { Plugin, Context } from '@nuxt/types'
 import { User } from "~/util/types"
 
 interface auth {
@@ -34,58 +34,65 @@ declare module 'vuex/types/index' {
     }
 }
 
-const plugin: Plugin = ({ store, $axios, redirect }, inject) => {
+const plugin: Plugin = (ctx, inject) => {
 
-    $axios.onError(error => {
+    ctx.$axios.onError(error => {
         if (error.response.status === 401) {
-            redirect('/login')
+            ctx.redirect('/login')
         }
     })
 
-    const login = async (email: string, password: string) => {
-
-        try {
-            var result = await $axios.post("/api/auth/login", { email, password });
-            if (result.status !== 200) {
-                return false
-            } else {
-                store.commit(mutations.setUser.name, { email: email } as User)
-                return true
-            }
-
-        } catch (err) {
-            return false
-        }
-    }
-
-    const verify = async () => {
-        try {
-            const result = await $axios.get<User>("/api/auth/verifySession");
-            if (result.status !== 200) {
-                return false
-            } else {
-                console.log(result.data)
-                store.commit(mutations.setUser.name, { email: result.data.email } as User)
-                return true
-            }
-        } catch (err) {
-            return false
-        }
-    }
-
-    const logout = async () => {
-        await $axios.$post("/api/auth/logout").catch(err => err);
-        store.commit(mutations.setUser.name, null);
-        redirect("/login")
-    }
-
     const methods: auth = {
-        login: login,
-        logout: logout,
-        verify: verify
+        login: login(ctx),
+        logout: logout(ctx),
+        verify: verify(ctx)
     }
 
     inject('auth', methods)
 }
+
+function login(ctx: Context) {
+    return async (email: string, password: string) => {
+
+        try {
+            var result = await ctx.$axios.post("/api/auth/login", { email, password });
+            if (result.status !== 200) {
+                return false
+            } else {
+                ctx.store.commit(mutations.setUser.name, { email: email } as User)
+                return true
+            }
+
+        } catch (err) {
+            return false
+        }
+    }
+}
+
+function logout(ctx: Context) {
+    return async () => {
+        await ctx.$axios.$post("/api/auth/logout").catch(err => err);
+        ctx.store.commit(mutations.setUser.name, null);
+        ctx.redirect("/login")
+    }
+}
+
+function verify(ctx: Context) {
+    return async () => {
+        try {
+            const result = await ctx.$axios.get<User>("/api/auth/verifySession");
+            if (result.status !== 200) {
+                return false
+            } else {
+                console.log(result.data)
+                ctx.store.commit(mutations.setUser.name, { email: result.data.email } as User)
+                return true
+            }
+        } catch (err) {
+            return false
+        }
+    }
+}
+
 
 export default plugin

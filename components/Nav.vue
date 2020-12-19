@@ -42,7 +42,7 @@ export default Vue.extend({
   },
 
   mounted() {
-   
+
   },
 
   methods: {
@@ -55,7 +55,6 @@ export default Vue.extend({
     },
 
     logout() {
-      console.log("yooyoyoo")
       this.$auth.logout();
     }
   },
