@@ -1,18 +1,15 @@
 <template>
   <div class="relative h-full">
     <div class="flex h-full">
-      <div class="w-4/6 flex-auto">
-        <textarea
-          class="editor"
-          ref="editor"
-          id="editor"
-          name="editor"
-        ></textarea>
+      <div class="w-9/12 relative">
+        <div class="absolute top-0 left-0 right-0 bottom-0">
+          <textarea ref="editor" id="editor" name="editor"></textarea>
+        </div>
       </div>
 
-      <div class="w-2/6 px-4">
+      <div class="w-3/12 px-4">
         <div
-          class="shadow bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 mb-8"
+          class="shadow bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 z-10 mb-8"
         >
           <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">
             Backtest
@@ -21,7 +18,7 @@
             Using historical price data from Binance, test your algorithm's
             profitability.
           </p>
-          <div class="relative mb-4">
+          <div class="mb-4">
             <label for="symbol" class="leading-7 text-sm text-gray-600"
               >Symbol</label
             >
@@ -32,7 +29,7 @@
               class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
-          <div class="relative mb-4">
+          <div class="mb-4">
             <label for="days" class="leading-7 text-sm text-gray-600"
               >Past Days</label
             >
@@ -73,22 +70,29 @@
             Task requires a "task" function.
           </p>
         </div>
-
-        <div class="flex">
-
-          <p class="leading-relaxed" v-for="(item, index) in result">
-            {{item}}
-          </p>
-        </div>
       </div>
+    </div>
+
+    <div
+      v-if="showResult"
+      class="shadow absolute top-0 right-0 px-8 py-3 task-result"
+    >
+      <h2 v-if="loading">Loading....</h2>
+
+      <button v-if="!loading" @click="onCloseResult" class="p-4">Close</button>
+      <br />
+
+      <div v-if="errResponse" class="red leading-relaxed">
+        <p>{{ errResponse.errCode }}</p>
+        <p>{{ errResponse.errorBody }}</p>
+      </div>
+
+      <p class="leading-relaxed" v-for="(item, index) in result">
+        {{ item.date }}: {{ item.body }}
+      </p>
     </div>
   </div>
 </template>
-
-
-
-
-
 
 <script lang="ts">
 // type BacktestRequest struct {
@@ -123,7 +127,6 @@ export default Vue.extend({
   mounted() {
     cm = code.fromTextArea(this.$refs.editor, {
       lineNumbers: true,
-      value: 'console.log("Hello, World");',
       mode: "javascript",
       theme: "monokai",
       keyMap: "sublime",
@@ -138,14 +141,35 @@ export default Vue.extend({
 
   methods: {
     async onTask() {
+      this.showResult = true;
+      this.loading = true;
+
       const req: TaskRequest = {
         body: this.cm.getValue(),
         exchange: "binance",
       };
 
-      let result = (await this.$api.task(req)) as TaskResponse;
-      this.result = result.logs.map(l => l.body);
-      console.log(result)
+      let result: TaskResponse = await this.$api.task(req);
+      this.loading = false;
+
+      if (result.errCode) {
+        this.errResponse = result;
+        return;
+      }
+
+      this.result = result.logs.map((l) => {
+        return {
+          body: l.body,
+          date: new Date(l.timestamp).toISOString(),
+        };
+      });
+    },
+
+    onCloseResult() {
+      this.showResult = false;
+      this.loading = false;
+      this.errResponse = null;
+      this.result = null;
     },
   },
 
@@ -153,7 +177,10 @@ export default Vue.extend({
     let cm: EditorFromTextArea = null;
     return {
       cm,
-      result: null
+      result: null,
+      showResult: false,
+      loading: false,
+      errResponse: null,
     };
   },
 });
@@ -163,8 +190,15 @@ export default Vue.extend({
 @import "codemirror/lib/codemirror.css";
 @import "codemirror/theme/monokai.css";
 
-.editor {
+.task-result {
+  z-index: 10;
+  background-color: black;
+  width: 50%;
   height: 100%;
+  color: white;
+  overflow-wrap: break-word;
+  font-size: 14px;
+  overflow-y: scroll;
 }
 
 .CodeMirror {

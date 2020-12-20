@@ -1,8 +1,8 @@
 import { Plugin, Context } from '@nuxt/types'
-import { TaskRequest } from "~/util/types"
+import { TaskRequest, TaskResponse, ErrorResponse } from "~/util/types"
 
 interface api {
-    task: (task: TaskRequest) => Promise<string>;
+    task: (task: TaskRequest) => Promise<TaskResponse>;
 }
 
 declare module 'vue/types/vue' {
@@ -38,11 +38,27 @@ const plugin: Plugin = (ctx, inject) => {
 function task(ctx: Context) {
     return async (task: TaskRequest) => {
         try {
-            return await ctx.$axios.$post("/task", task);
-        } catch (err) {
-            return ""
+            return await ctx.$axios.$post<TaskResponse>("/task", task)
+        }
+        catch (e) {
+            return extractErrorResponse(e) as TaskResponse
         }
     }
+}
+
+function extractErrorResponse(err: any) {
+    if (err.response?.data?.errorCode !== undefined) {
+        let ret: ErrorResponse = {
+            errCode: err.response.data.errorCode,
+            errorBody: err.response.data.errorBody
+        }
+        return ret;
+    }
+
+    let ret: ErrorResponse = {
+        errCode: "unknown",
+    }
+    return ret
 }
 
 export default plugin

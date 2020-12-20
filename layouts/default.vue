@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div class="flex flex-col h-full">
     <Nav />
     <Nuxt />
   </div>
@@ -17,10 +17,9 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
   height: 100%;
-  overflow: hidden;
 }
 
-body, body > div {
+body {
   height: 100%;
 }
 

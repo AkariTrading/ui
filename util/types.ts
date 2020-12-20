@@ -7,13 +7,17 @@ export interface TaskRequest {
     exchange: string;
 }
 
+export interface ErrorResponse {
+    errCode?: string;
+    errorBody?: string;
+}
 
 interface LogEntry {
     body: string;
     timestamp: number;
 }
 
-export interface TaskResponse {
-    logs: LogEntry[];
+export interface TaskResponse extends ErrorResponse {
+    logs?: LogEntry[];
 }
 

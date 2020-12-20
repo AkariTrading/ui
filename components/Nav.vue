@@ -5,11 +5,11 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
       </svg>
-      <span class="ml-3 text-xl">fiScript</span> <span class="ml-4 text-red-500">Demo </span>
+      <span class="ml-3 text-xl">fiScript</span> <span class="ml-4 text-red-500">Demo</span>
     </a>
     <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
       <a target="_blank" href="https://twitter.com/goodarchitect94" class="text-gray-900 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">@goodarchitect94</a>
-      <a target="_blank" href="/documentation" class="text-gray-900 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Documentation</a>
+      <a target="_blank" class="text-gray-900 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Documentation (coming soon)</a>
     </nav>
 
     <div class="coffe">
