@@ -20,27 +20,42 @@
           </p>
           <div class="mb-4">
             <label for="symbol" class="leading-7 text-sm text-gray-600"
-              >Symbol</label
+              >Base Asset</label
             >
             <input
-              value="BTCUSDT"
+              v-model="baseAsset"
               type="text"
               name="symbol"
               class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
           <div class="mb-4">
+            <label for="symbol" class="leading-7 text-sm text-gray-600"
+              >Quote Asset</label
+            >
+            <input
+              value="BTCUSDT"
+              v-model="quoteAsset"
+              type="text"
+              name="symbol"
+              class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+            />
+          </div>
+
+          <div class="mb-4">
             <label for="days" class="leading-7 text-sm text-gray-600"
               >Past Days</label
             >
             <input
               value="100"
+              v-model="days"
               type="number"
               name="days"
               class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
           <button
+            @click="onBacktest"
             class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
           >
             Run
@@ -110,7 +125,12 @@
 
 import Vue from "vue";
 import { EditorFromTextArea } from "codemirror";
-import { TaskRequest, TaskResponse } from "~/util/types";
+import {
+  BacktestRequest,
+  BacktestResponse,
+  TaskRequest,
+  TaskResponse,
+} from "~/util/types";
 
 let cm: EditorFromTextArea;
 let code: any;
@@ -165,6 +185,48 @@ export default Vue.extend({
       });
     },
 
+    async onBacktest() {
+      this.showResult = true;
+      this.loading = true;
+
+      const milliInMinute = 60 * 1000;
+      const milliInDay = 24 * 60 * milliInMinute;
+
+      const endTimestamp = Date.now() - 10 * milliInMinute;
+      const baseAsset = this.baseAsset.toUpperCase();
+      const quoteAsset = this.quoteAsset.toUpperCase();
+      const balance = { [this.baseAsset]: 0, [this.quoteAsset]: 100 };
+
+      const req: BacktestRequest = {
+        body: this.cm.getValue(),
+        exchange: "binance",
+        baseAsset,
+        quoteAsset,
+        symbol: baseAsset + quoteAsset,
+        startTimestamp: endTimestamp - this.days * milliInDay,
+        endTimestamp,
+        balance,
+        fee: 0.001,
+      };
+
+      let result: BacktestResponse = await this.$api.backtest(req);
+      this.loading = false;
+
+      if (result.errCode) {
+        this.errResponse = result;
+        return;
+      }
+
+      console.log(this.result);
+
+      this.result = result.logs.map((l) => {
+        return {
+          body: l.body,
+          date: new Date(l.timestamp).toISOString(),
+        };
+      });
+    },
+
     onCloseResult() {
       this.showResult = false;
       this.loading = false;
@@ -181,6 +243,9 @@ export default Vue.extend({
       showResult: false,
       loading: false,
       errResponse: null,
+      days: 90,
+      baseAsset: "BTC",
+      quoteAsset: "USDT",
     };
   },
 });
