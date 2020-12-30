@@ -2,7 +2,7 @@ import { Middleware } from '@nuxt/types'
 
 const auth: Middleware = async ({ store, redirect, req, $axios, $auth }) => {
 
-    console.log("server", process.server, "client", process.client);
+    // console.log("server", process.server, "client", process.client);
 
     redirect("/demo")
     return

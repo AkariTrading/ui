@@ -29,6 +29,11 @@ declare module 'vuex/types/index' {
 
 const plugin: Plugin = (ctx, inject) => {
 
+    if (process.env.NODE_ENV === "development")
+        ctx.$axios.setBaseURL('http://localhost:7300')
+    else
+        ctx.$axios.setBaseURL('http://localhost:7300')
+
     const methods: api = {
         task: task(ctx),
         backtest: backtest(ctx)

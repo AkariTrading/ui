@@ -43,7 +43,6 @@ export default {
   ],
 
   axios: {
-    baseURL: 'http://localhost:7300',
     credentials: true,
   },
 

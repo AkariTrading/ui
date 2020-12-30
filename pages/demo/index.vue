@@ -1,13 +1,13 @@
 <template>
   <div class="relative h-full">
     <div class="flex h-full">
-      <div class="w-9/12 relative">
-        <div class="absolute top-0 left-0 right-0 bottom-0">
-          <textarea ref="editor" id="editor" name="editor"></textarea>
+      <div class="w-8/12 relative">
+        <div class="editor-wrapper absolute top-0 left-0 right-0 bottom-0">
+          <textarea ref="editor" class="editor"></textarea>
         </div>
       </div>
 
-      <div class="w-3/12 px-4">
+      <div class="w-4/12 px-4">
         <div
           class="shadow bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 z-10 mb-8"
         >
@@ -98,8 +98,8 @@
       <br />
 
       <div v-if="errResponse" class="red leading-relaxed">
-        <p>{{ errResponse.errCode }}</p>
-        <p>{{ errResponse.errorBody }}</p>
+        <p>error: {{ errResponse.errCode }}</p>
+        <p v-if="errResponse.errorBody">{{errResponse.errorBody }}</p>
       </div>
 
       <p class="leading-relaxed" v-for="(item, index) in result">
@@ -139,10 +139,23 @@ if (process.client) {
   code = require("codemirror");
   require("codemirror/mode/javascript/javascript");
   require("codemirror/keymap/sublime.js");
+  require("codemirror/addon/hint/javascript-hint.js");
+  require("codemirror/addon/lint/lint.js");
+  require("codemirror/addon/lint/javascript-lint.js");
 }
 
 export default Vue.extend({
   // middleware: "auth",
+
+  head() {
+    return {
+      script: [
+        {
+          src: "https://unpkg.com/jshint@2.9.6/dist/jshint.js",
+        },
+      ],
+    };
+  },
 
   mounted() {
     cm = code.fromTextArea(this.$refs.editor, {
@@ -150,6 +163,10 @@ export default Vue.extend({
       mode: "javascript",
       theme: "monokai",
       keyMap: "sublime",
+      indentWithTabs: true,
+      indentUnit: 4,
+      gutters: ["CodeMirror-lint-markers"],
+      lint: { esversion: 6, asi: true },
     });
 
     cm.setValue(
@@ -254,6 +271,7 @@ export default Vue.extend({
 <style>
 @import "codemirror/lib/codemirror.css";
 @import "codemirror/theme/monokai.css";
+@import "codemirror/addon/lint/lint.css";
 
 .task-result {
   z-index: 10;
@@ -264,6 +282,15 @@ export default Vue.extend({
   overflow-wrap: break-word;
   font-size: 14px;
   overflow-y: scroll;
+}
+
+.editor-wrapper {
+  background-color: #272822;
+}
+
+.editor {
+  background-color: #272822;
+  resize: none;
 }
 
 .CodeMirror {
