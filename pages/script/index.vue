@@ -57,7 +57,7 @@ require("codemirror/keymap/sublime.js");
 
 export default Vue.extend({
 
-  // middleware: "auth",
+  middleware: "auth",
 
   mounted() {
     let cm = code.fromTextArea(this.$refs.editor, {

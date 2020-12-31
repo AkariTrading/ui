@@ -2,8 +2,8 @@ import { Plugin, Context } from '@nuxt/types'
 import { TaskRequest, TaskResponse, ErrorResponse, BacktestRequest, BacktestResponse } from "~/util/types"
 
 interface api {
-    task: (TaskRequest) => Promise<TaskResponse>;
-    backtest: (BacktestRequest) => Promise<BacktestResponse>;
+    task: (req: TaskRequest) => Promise<TaskResponse>;
+    backtest: (req: BacktestRequest) => Promise<BacktestResponse>;
 }
 
 declare module 'vue/types/vue' {

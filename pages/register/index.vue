@@ -19,6 +19,9 @@
 import Vue from "vue";
 
 export default Vue.extend({
+
+  middleware: "auth",
+
   data() {
     return {
       email: "",
