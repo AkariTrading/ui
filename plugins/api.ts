@@ -30,9 +30,9 @@ declare module 'vuex/types/index' {
 const plugin: Plugin = (ctx, inject) => {
 
     if (process.env.NODE_ENV === "development")
-        ctx.$axios.setBaseURL('http://localhost:7300')
+        ctx.$axios.setBaseURL('http://localhost:7000')
     else
-        ctx.$axios.setBaseURL('http://localhost:7300')
+        ctx.$axios.setBaseURL('http://api.fiscript.io')
 
     const methods: api = {
         task: task(ctx),
@@ -45,7 +45,7 @@ const plugin: Plugin = (ctx, inject) => {
 function task(ctx: Context) {
     return async (task: TaskRequest) => {
         try {
-            return await ctx.$axios.$post<TaskResponse>("/task", task)
+            return await ctx.$axios.$post<TaskResponse>("/exec/task", task)
         }
         catch (e) {
             return extractErrorResponse(e) as TaskResponse
@@ -56,7 +56,7 @@ function task(ctx: Context) {
 function backtest(ctx: Context) {
     return async (task: BacktestRequest) => {
         try {
-            return await ctx.$axios.$post<TaskResponse>("/backtest", task)
+            return await ctx.$axios.$post<TaskResponse>("/exec/backtest", task)
         }
         catch (e) {
             return extractErrorResponse(e) as TaskResponse
