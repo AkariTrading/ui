@@ -99,7 +99,7 @@
 
       <div v-if="errResponse" class="red leading-relaxed">
         <p>error: {{ errResponse.errCode }}</p>
-        <p v-if="errResponse.errorBody">{{errResponse.errorBody }}</p>
+        <p v-if="errResponse.errorBody">{{ errResponse.errorBody }}</p>
       </div>
 
       <p class="leading-relaxed" v-for="(item, index) in result">
@@ -131,6 +131,7 @@ import {
   TaskRequest,
   TaskResponse,
 } from "~/util/types";
+import { toDateStr } from "~/util/util";
 
 let cm: EditorFromTextArea;
 let code: any;
@@ -197,7 +198,7 @@ export default Vue.extend({
       this.result = result.logs.map((l) => {
         return {
           body: l.body,
-          date: new Date(l.timestamp).toISOString(),
+          date: toDateStr(l.timestamp),
         };
       });
     },
@@ -226,22 +227,42 @@ export default Vue.extend({
         fee: 0.001,
       };
 
-      let result: BacktestResponse = await this.$api.backtest(req);
+      let res: BacktestResponse = await this.$api.backtest(req);
       this.loading = false;
 
-      if (result.errCode) {
-        this.errResponse = result;
+      if (res.errCode) {
+        this.errResponse = res;
         return;
       }
 
-      console.log(this.result);
-
-      this.result = result.logs.map((l) => {
+      const logs = res.logs.map((l) => {
         return {
           body: l.body,
-          date: new Date(l.timestamp).toISOString(),
+          date: toDateStr(l.timestamp),
         };
       });
+
+      let result = [
+        {
+          body: `start date ${toDateStr(res.startTimestamp)}, end date ${toDateStr(res.endTimestamp)}`,
+          date: "",
+        },
+        {
+          body: `start balance ${JSON.stringify(balance)}`,
+          date: "",
+        },
+        {
+          body: `final balance ${JSON.stringify(res.balance)}`,
+          date: "",
+        },
+
+        {
+          body: `total ${quoteAsset} ${res.balance[baseAsset] * res.lastPrice + res.balance[quoteAsset]}`,
+          date: "",
+        },
+      ];
+
+      this.result = [...result, ...logs];
     },
 
     onCloseResult() {

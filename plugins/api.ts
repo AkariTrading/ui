@@ -48,7 +48,7 @@ function task(ctx: Context) {
             return await ctx.$axios.$post<TaskResponse>("/exec/task", task)
         }
         catch (e) {
-            return extractErrorResponse(e) as TaskResponse
+            return extractErrorResponse(e) as TaskResponse;
         }
     }
 }
@@ -56,10 +56,10 @@ function task(ctx: Context) {
 function backtest(ctx: Context) {
     return async (task: BacktestRequest) => {
         try {
-            return await ctx.$axios.$post<TaskResponse>("/exec/backtest", task)
+            return await ctx.$axios.$post<BacktestResponse>("/exec/backtest", task)
         }
         catch (e) {
-            return extractErrorResponse(e) as TaskResponse
+            return extractErrorResponse(e) as BacktestResponse;
         }
     }
 }
