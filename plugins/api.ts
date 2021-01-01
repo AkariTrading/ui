@@ -32,7 +32,7 @@ const plugin: Plugin = (ctx, inject) => {
     if (process.env.NODE_ENV === "development")
         ctx.$axios.setBaseURL('http://localhost:7000')
     else
-        ctx.$axios.setBaseURL('http://api.fiscript.io')
+        ctx.$axios.setBaseURL('http://fiscript.io/api')
 
     const methods: api = {
         task: task(ctx),
