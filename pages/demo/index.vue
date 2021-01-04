@@ -159,6 +159,9 @@ export default Vue.extend({
   },
 
   mounted() {
+
+    const storage = window.localStorage;
+
     cm = code.fromTextArea(this.$refs.editor, {
       lineNumbers: true,
       mode: "javascript",
@@ -171,8 +174,12 @@ export default Vue.extend({
     });
 
     cm.setValue(
-      'export function task({candles, symbols}) {\n\tconsole.log("one-time task")\n}'
+      storage.getItem('editor') || 'export function task({candles, symbols}) {\n\tconsole.log("one-time task")\n}'
     );
+
+    cm.on('change', (ctx) => {
+      storage.setItem('editor', ctx.getValue())
+    })
 
     this.cm = cm;
   },
