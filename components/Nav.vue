@@ -9,7 +9,7 @@
     </a>
     <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
       <a target="_blank" href="https://twitter.com/goodarchitect94" class="text-gray-900 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">@goodarchitect94</a>
-      <a target="_blank" class="text-gray-900 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Documentation (coming soon)</a>
+      <a target="_blank" href="https://www.buymeacoffee.com/goodarchitect/what-fiscript-io" class="text-gray-900 hover:bg-gray-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Documentation</a>
     </nav>
 
     <div class="coffe">
